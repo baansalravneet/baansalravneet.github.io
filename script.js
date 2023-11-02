@@ -27,3 +27,10 @@ setTimeout(function() {
     content.style.transform = 'translateY(0)';
     content.style.pointerEvents = "auto";
 }, 3500);
+
+setTimeout(function() {
+    const content = document.getElementById('minesweeper-board');
+    content.style.opacity = 1;
+    content.style.transform = 'translateY(0)';
+    content.style.pointerEvents = "auto";
+}, 3700);

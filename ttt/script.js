@@ -17,11 +17,7 @@ playAgainButton.addEventListener("click", restartGame);
 tiles.forEach(tile => tile.addEventListener("click", tileClick));
 
 function setHoverText() {
-    // remove hover text
-    tiles.forEach(tile => {
-        tile.classList.remove("x-hover");
-        tile.classList.remove("o-hover");
-    });
+    removeHoverText();
 
     // set hover
     const hoverClass = `${turn.toLowerCase()}-hover`;
@@ -30,6 +26,14 @@ function setHoverText() {
             tile.classList.add(hoverClass);
         }
     })
+}
+
+function removeHoverText() {
+    // remove hover text
+    tiles.forEach(tile => {
+        tile.classList.remove("x-hover");
+        tile.classList.remove("o-hover");
+    });
 }
 
 setHoverText();
@@ -80,6 +84,7 @@ function checkWinner() {
         ) {
             strike.classList.add(strikeClass);
             gameOverScreen(tileValue1);
+            removeHoverText();
             return;
         }
     }

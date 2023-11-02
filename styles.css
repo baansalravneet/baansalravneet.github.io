@@ -9,6 +9,10 @@ body {
 	overflow: hidden;
 }
 
+a {
+	text-decoration: none;
+}
+
 .tile {
     color: white;
     font-size: 2em;
@@ -60,6 +64,7 @@ p#secondary-text {
 
 #pages {
 	z-index: -1;
+	display: flex;
 }
 
 #ttt-board {
@@ -69,4 +74,13 @@ p#secondary-text {
 	transform: translateY(20px);
 	opacity: 0;
 	transition: opacity 1s ease, transform 1s ease;
+	margin: 20px;
+}
+
+#minesweeper-board {
+	color: #FFFFFF;
+	opacity: 0;
+	transform: translateY(20px);
+	transition: opacity 1s ease, transform 1s ease;
+	margin: 20px;
 }
