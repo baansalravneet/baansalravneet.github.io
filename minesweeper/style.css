@@ -13,6 +13,7 @@ h1 {
 
 #board {
     cursor: default;
+    user-select: none;
 }
 
 #score-card {

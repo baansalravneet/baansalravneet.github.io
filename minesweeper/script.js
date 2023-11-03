@@ -2,6 +2,7 @@ const tiles = document.querySelectorAll(".tile");
 const tileMap = new Map();
 tiles.forEach(tile => {
     tile.addEventListener("click", tileClick);
+    tile.addEventListener("contextmenu", tileClick);
     tileMap.set(parseInt(tile.dataset.index), tile);
 });
 
@@ -67,11 +68,11 @@ function setMines() {
 }
 
 function floodFill(index) {
-    if (tileMap.get(index).innerText != "" &&
-        tileMap.get(index).innerText != "F") {
+    if (tileMap.get(index).style.backgroundColor == "grey" ||
+        tileMap.get(index).innerText == "F") {
             return;
         }
-    tileMap.get(index).innerText = adjacent[index];
+    tileMap.get(index).innerText = adjacent[index] == 0 ? "" : adjacent[index];
     tileMap.get(index).style.backgroundColor = "grey";
     if (adjacent[index] == 0) {
         const nextIndices = getNeighbourIndices(index);
@@ -82,8 +83,19 @@ function floodFill(index) {
 shuffle();
 setMines();
 
+// try to maintain the states of the tiles rather than
+// relying on the state of the styles.
 function tileClick(event) {
     const tile = event.target;
+    if (event.type == "contextmenu") {
+        event.preventDefault();
+        tile.innerText = tile.innerText == "F" ? "" : "F";
+        tile.style.backgroundColor = tile.style.backgroundColor == "pink" ? "" : "pink";
+        return;
+    }
+    if (tile.innerText == "F") {
+        return;
+    }
     var clickedIndex = parseInt(tile.dataset.index);
     if (adjacent[clickedIndex] == -1) {
         tile.style.backgroundColor = "red";
