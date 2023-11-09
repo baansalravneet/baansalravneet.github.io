@@ -1,5 +1,13 @@
 const tiles = document.querySelectorAll(".tile");
+const smiley = document.getElementById("smiley");
+const tilesLeft = document.getElementById("tiles-left");
+const minesLeft = document.getElementById("remaining-mines");
+
+smiley.addEventListener("mousedown", smileyClickDown);
+smiley.addEventListener("mouseup", smileyClickUp);
+
 const tileMap = new Map();
+
 tiles.forEach(tile => {
     tile.addEventListener("click", tileClick);
     tile.addEventListener("contextmenu", tileClick);
@@ -8,6 +16,8 @@ tiles.forEach(tile => {
 
 var shuffledList = [];
 var adjacent = []; // -1 = mine
+var totalCovered = 90;
+var totalFlags = 10;
 
 const directions = [[-1,-1], [-1,0], [-1,1],
                     [ 0,-1],         [ 0,1],
@@ -15,6 +25,7 @@ const directions = [[-1,-1], [-1,0], [-1,1],
 
 function shuffle() {
     shuffledList = [];
+    adjacent = [];
     for (var i = 0; i <= 99; i++) {
         shuffledList.push(i);
         adjacent.push(0);
@@ -69,11 +80,12 @@ function setMines() {
 
 function floodFill(index) {
     if (tileMap.get(index).style.backgroundColor == "grey" ||
-        tileMap.get(index).innerText == "F") {
+        tileMap.get(index).innerText == "🚩") {
             return;
         }
     tileMap.get(index).innerText = adjacent[index] == 0 ? "" : adjacent[index];
     tileMap.get(index).style.backgroundColor = "grey";
+    totalCovered--;
     if (adjacent[index] == 0) {
         const nextIndices = getNeighbourIndices(index);
         nextIndices.forEach(i => floodFill(i));
@@ -86,21 +98,58 @@ setMines();
 // try to maintain the states of the tiles rather than
 // relying on the state of the styles.
 function tileClick(event) {
+    if (smiley.innerText != "🙂") return;
     const tile = event.target;
     if (event.type == "contextmenu") {
         event.preventDefault();
-        tile.innerText = tile.innerText == "F" ? "" : "F";
-        tile.style.backgroundColor = tile.style.backgroundColor == "pink" ? "" : "pink";
+        totalFlags = tile.innerText == "🚩" ? totalFlags+1 : totalFlags-1;
+        tile.innerText = tile.innerText == "🚩" ? "" : "🚩";
+        minesLeft.innerText = totalFlags;
         return;
     }
-    if (tile.innerText == "F") {
+    if (tile.innerText == "🚩") {
         return;
     }
     var clickedIndex = parseInt(tile.dataset.index);
     if (adjacent[clickedIndex] == -1) {
         tile.style.backgroundColor = "red";
-        tile.innerText = "X";
+        tile.innerText = "💣";
+        gameOver(false);
     } else {
         floodFill(clickedIndex);
     }
+    tilesLeft.innerHTML = totalCovered;
+    if (totalCovered == 0) {
+        gameOver(true);
+    }
+}
+
+function gameOver(win) {
+    if (win) {
+        smiley.innerText = "😎";
+    } else {
+        smiley.innerText = "💀";
+    }
+}
+
+function restartGame() {
+    tiles.forEach(tile => {
+        tile.innerText = "";
+        tile.style.backgroundColor = "";
+    });
+    shuffle();
+    setMines();
+    totalCovered = 90;
+    totalFlags = 10;
+    tilesLeft.innerText = totalCovered;
+    minesLeft.innerText = totalFlags;
+}
+
+function smileyClickDown() {
+    smiley.innerText = "😮";
+}
+
+function smileyClickUp() {
+    smiley.innerText = "🙂";
+    restartGame();
 }

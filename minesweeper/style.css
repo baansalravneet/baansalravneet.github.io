@@ -22,6 +22,10 @@ h1 {
     grid-template-rows: 50px;
 }
 
+#smiley {
+    font-size: 2em;
+}
+
 #score-card > div {
     display: flex;
     align-items: center;
@@ -41,4 +45,12 @@ h1 {
     justify-content: center;
     align-items: center;
     border: 0.1em solid white;
+}
+
+.hidden {
+    display: none;
+}
+
+.visible {
+    display: block;
 }
