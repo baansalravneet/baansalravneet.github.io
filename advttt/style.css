@@ -1,0 +1,69 @@
+body {
+    background-color: dimgray;
+    font-family: 'Ubuntu', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: white;
+}
+
+h1 {
+    color: cyan;
+}
+
+#board {
+    display: grid;
+    grid-template-columns: repeat(9, 72px);
+    grid-template-rows: repeat(9, 72px);
+    position: relative;
+}
+
+.tile {
+    color: white;
+    font-size: 1.5em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.right-border-thick {
+    border-right: 0.2em solid white;
+}
+
+.left-border-thick {
+    border-left: 0.2em solid white;
+}
+
+.bottom-border-thick {
+    border-bottom: 0.2em solid white;
+}
+
+.top-border-thick {
+    border-top: 0.2em solid white;
+}
+
+.right-border-thin {
+    border-right: 0.05em solid white;
+}
+
+.left-border-thin {
+    border-left: 0.05em solid white;
+}
+
+.top-border-thin {
+    border-top: 0.05em solid white;
+}
+
+.bottom-border-thin {
+    border-bottom: 0.05em solid white;
+}
+
+.x-hover:hover::after {
+    content: "💙";
+    opacity: 0.4;
+}
+
+.o-hover:hover::after {
+    content: "💚";
+    opacity: 0.4;
+}
