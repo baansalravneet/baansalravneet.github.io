@@ -12,6 +12,10 @@ h1 {
 }
 
 #board {
+    cursor: default;
+}
+
+#tile-grid {
     display: grid;
     grid-template-columns: repeat(9, 72px);
     grid-template-rows: repeat(9, 72px);
@@ -24,6 +28,7 @@ h1 {
     display: flex;
     justify-content: center;
     align-items: center;
+    z-index: 2;
 }
 
 .right-border-thick {
@@ -66,4 +71,29 @@ h1 {
 .o-hover:hover::after {
     content: "💚";
     opacity: 0.4;
+}
+
+#minor-win-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 216px);
+    grid-template-rows: repeat(3, 216px);
+    position: relative;
+    margin-top: -648px;
+}
+
+.minor-win {
+    position: absolute;
+    font-size: 180px;
+}
+
+.hidden {
+    display: none;
+}
+
+.visible {
+    display: block;
+}
+
+.top-element{
+    z-index: 100;
 }
