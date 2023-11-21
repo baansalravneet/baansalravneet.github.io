@@ -22,7 +22,7 @@ setTimeout(function() {
 }, 3500);
 
 setTimeout(function() {
-    const content = document.getElementById('ttt-board');
+    const content = document.getElementById('ttt-logo');
     content.style.opacity = 1;
     content.style.transform = 'translateY(0)';
     content.style.pointerEvents = "auto";
@@ -34,3 +34,10 @@ setTimeout(function() {
     content.style.transform = 'translateY(0)';
     content.style.pointerEvents = "auto";
 }, 3700);
+
+setTimeout(function() {
+    const content = document.getElementById('superttt-logo');
+    content.style.opacity = 1;
+    content.style.transform = 'translateY(0)';
+    content.style.pointerEvents = "auto";
+}, 3900);
