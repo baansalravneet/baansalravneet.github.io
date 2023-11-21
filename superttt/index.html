@@ -8,7 +8,26 @@
 
 <body>
     <h1>Super Tic Tac Toe</h1>
-    <div id="board">
+    <div id="selection">
+        <div id="selection-heading">
+            <h2>Select Players</h2>
+        </div>
+        <div id="selection-options">
+            <div data-index="1" class="emoji">💚</div>
+            <div data-index="2" class="emoji">💙</div>
+            <div data-index="2" class="emoji">❤️</div>
+            <div data-index="2" class="emoji">🩵</div>
+            <div data-index="2" class="emoji">🩷</div>
+            <div data-index="2" class="emoji">🩶</div>
+            <div data-index="2" class="emoji">🤎</div>
+            <div data-index="2" class="emoji">💜</div>
+            <div data-index="2" class="emoji">🧡</div>
+            <div data-index="2" class="emoji">🖤</div>
+            <div data-index="2" class="emoji">🤍</div>
+            <div data-index="2" class="emoji">💛</div>
+        </div>
+    </div>
+    <div id="board" class="hidden">
         <!-- TILES -->
         <div id="tile-grid">
             <div data-index="1" data-minor="1" class="tile right-border-thin bottom-border-thin"></div>
@@ -45,7 +64,7 @@
             <div data-index="32" data-minor="5" class="tile top-border-thick bottom-border-thin left-border-thin right-border-thin"></div>
             <div data-index="33" data-minor="5" class="tile right-border-thick top-border-thick bottom-border-thin left-border-thin"></div>
             <div data-index="34" data-minor="6" class="tile left-border-thick top-border-thick bottom-border-thin right-border-thin"></div>
-            <div data-index="35" data-minor="6"class="tile top-border-thick bottom-border-thin left-border-thin right-border-thin"></div>
+            <div data-index="35" data-minor="6" class="tile top-border-thick bottom-border-thin left-border-thin right-border-thin"></div>
             <div data-index="36" data-minor="6" class="tile top-border-thick bottom-border-thin left-border-thin"></div>
             <div data-index="37" data-minor="4" class="tile top-border-thin bottom-border-thin right-border-thin"></div>
             <div data-index="38" data-minor="4" class="tile top-border-thin bottom-border-thin left-border-thin right-border-thin"></div>
@@ -97,15 +116,15 @@
         
         <!-- Minor Win Objects -->
         <div id="minor-win-grid">
-            <div data-index="1" class="minor-win">💚</div>
-            <div data-index="2" class="minor-win">💚</div>
-            <div data-index="3" class="minor-win">💚</div>
-            <div data-index="4" class="minor-win">💚</div>
-            <div data-index="5" class="minor-win">💚</div>
-            <div data-index="6" class="minor-win">💚</div>
-            <div data-index="7" class="minor-win">💚</div>
-            <div data-index="8" class="minor-win">💚</div>
-            <div data-index="9" class="minor-win">💚</div>
+            <div data-index="1" class="minor-win"></div>
+            <div data-index="2" class="minor-win"></div>
+            <div data-index="3" class="minor-win"></div>
+            <div data-index="4" class="minor-win"></div>
+            <div data-index="5" class="minor-win"></div>
+            <div data-index="6" class="minor-win"></div>
+            <div data-index="7" class="minor-win"></div>
+            <div data-index="8" class="minor-win"></div>
+            <div data-index="9" class="minor-win"></div>
         </div>
         <!--  -->
     </div>

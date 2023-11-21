@@ -1,8 +1,15 @@
+const emojis = document.querySelectorAll(".emoji");
 const tiles = document.querySelectorAll(".tile");
 const minorWins = document.querySelectorAll(".minor-win");
 const minorWinsGrid = document.getElementById("minor-win-grid");
-const X = "💙";
-const O = "💚";
+const selection = document.getElementById("selection");
+const board = document.getElementById("board");
+const hoverClass = `player-hover`;
+let X = "";
+let O = "";
+
+const heading = document.querySelector("h1");
+
 
 const winningCombos = [
     // rows
@@ -19,13 +26,23 @@ let activeMinor = -1 // -1 for all active
 const minorState = Array(9);
 minorState.fill(0); // -1 - unavailable | 0 - available | 1 - X win | 2 - O win | 3 - draw
 
+emojis.forEach(emoji => emoji.addEventListener("click", emojiSelected));
 tiles.forEach(tile => tile.addEventListener("click", tileClick));
 
+// emoji selection ------------
+function emojiSelected(event) {
+    const emoji = event.target;
+    if (X == "") {
+        X = emoji.innerText;
+        return;
+    }
+    O = emoji.innerText;
+    startGame();
+}
 // hover-effect ---------------
 function setHoverText() {
     removeHoverText();
     // set hover
-    const hoverClass = turn === X ? `x-hover` : `o-hover`;
     tiles.forEach(tile => {
         if (tile.innerText === "" && minorState[tile.dataset.minor - 1] == 0 && (activeMinor == -1 || activeMinor == tile.dataset.minor - 1)) {
             tile.classList.add(hoverClass);
@@ -34,11 +51,9 @@ function setHoverText() {
 }
 function removeHoverText() {
     tiles.forEach(tile => {
-        tile.classList.remove("x-hover");
-        tile.classList.remove("o-hover");
+        tile.classList.remove(hoverClass);
     })
 }
-setHoverText();
 // ----------------------------
 
 // tile-click -----------------
@@ -48,14 +63,10 @@ function tileClick(event) {
     if (tile.innerText != "") return;
     if (minorState[tile.dataset.minor - 1] != 0) return;
     if (tile.dataset.minor - 1 != activeMinor && activeMinor != -1) return;
-    if (turn === X) {
-        tile.innerText = X;
-    } else {
-        tile.innerText = O;
-    }
+    tile.innerText = turn === O ? O : X;
     updateMinorState(tile, tileNumber - 1);
     setActiveMinor(tileNumber - 1);
-    turn = turn === X ? O : X;
+    switchTurns();
     setHoverText();
 }
 // ----------------------------
@@ -64,7 +75,7 @@ function tileClick(event) {
 function updateMinorState(tile, tileIndex) {
     if (checkMinorRowWin(tileIndex) || checkMinorColumnWin(tileIndex) || checkMinorDiagonalWin(tileIndex)) {
         bringMinorWinToFront(tileIndex);
-        minorState[tile.dataset.minor - 1] = turn == X ? 1 : 2;
+        minorState[tile.dataset.minor - 1] = turn === X ? 1 : 2;
         if (checkMajorWin(tile.dataset.minor - 1)) {
             showWinFrame();
         }
@@ -167,7 +178,6 @@ function restartGame() { // PENDING
         minorWin.classList.toggle("hidden");
     });
 }
-restartGame();
 // ----------------------------
 
 // minor-win ------------------
@@ -198,5 +208,41 @@ function showDrawFrame() {
 function showWinFrame() {
     const winner = turn;
     console.log(`${winnder} is the winner`);
+}
+// ----------------------------
+
+// game loop ------------------
+function startGame() {
+    hideSelection();
+    showBoard();
+    turn = O;
+    switchTurns();
+    setHoverText();
+    restartGame();
+}
+function hideSelection() {
+    selection.classList.toggle("hidden");
+}
+function showBoard() {
+    board.classList.toggle("hidden");
+}
+function switchTurns() {
+    turn = turn === X ? O : X;
+    changeHoverRule()
+}
+function changeHoverRule() {
+    var ruleIndex = findRuleIndex();
+    console.log(ruleIndex);
+    if (ruleIndex !== -1) document.styleSheets[0].deleteRule(ruleIndex);
+    const newRule = `.player-hover:hover::after { content: '${turn}'; opacity: 0.4; }`; 
+    document.styleSheets[0].insertRule(newRule);
+}
+function findRuleIndex() {
+    for (var i = 0; i < document.styleSheets[0].cssRules.length; i++) {
+        if (document.styleSheets[0].cssRules[i].selectorText === '.player-hover:hover::after') {
+            return i;
+        }
+    }
+    return -1;
 }
 // ----------------------------
