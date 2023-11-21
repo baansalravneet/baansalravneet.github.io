@@ -112,3 +112,24 @@ h2 {
 .top-element{
     z-index: 100;
 }
+
+#game-over-area {
+    text-align: center;
+    border: cyan 4px solid;
+    padding: 50px;
+    width: 50%;
+    margin-top: 50px;
+}
+
+#game-over-text {
+    color: white;
+    margin-top: 0px;
+}
+
+button {
+    background-color: transparent;
+    font-family: 'Ubuntu', sans-serif;
+    color: white;
+    border: cyan 2px solid;
+    padding: 10px;
+}

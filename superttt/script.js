@@ -5,11 +5,12 @@ const minorWinsGrid = document.getElementById("minor-win-grid");
 const selection = document.getElementById("selection");
 const board = document.getElementById("board");
 const hoverClass = `player-hover`;
+const gameOverArea = document.getElementById("game-over-area");
+const gameOverText = document.getElementById("game-over-text");
+const playAgainButton = document.getElementById("play-again-button");
+playAgainButton.addEventListener("click", startGame);
 let X = "";
 let O = "";
-
-const heading = document.querySelector("h1");
-
 
 const winningCombos = [
     // rows
@@ -24,7 +25,6 @@ let turn = X;
 let activeMinor = -1 // -1 for all active
 
 const minorState = Array(9);
-minorState.fill(0); // -1 - unavailable | 0 - available | 1 - X win | 2 - O win | 3 - draw
 
 emojis.forEach(emoji => emoji.addEventListener("click", emojiSelected));
 tiles.forEach(tile => tile.addEventListener("click", tileClick));
@@ -34,10 +34,12 @@ function emojiSelected(event) {
     const emoji = event.target;
     if (X == "") {
         X = emoji.innerText;
+        emoji.style.opacity = 0.2;
         return;
     }
+    if (X == emoji.innerText) return;
     O = emoji.innerText;
-    startGame();
+    continueGame();
 }
 // hover-effect ---------------
 function setHoverText() {
@@ -58,16 +60,19 @@ function removeHoverText() {
 
 // tile-click -----------------
 function tileClick(event) {
+    if (!gameOverArea.classList.contains("hidden")) return;
     const tile = event.target;
     const tileNumber = tile.dataset.index;
     if (tile.innerText != "") return;
     if (minorState[tile.dataset.minor - 1] != 0) return;
     if (tile.dataset.minor - 1 != activeMinor && activeMinor != -1) return;
     tile.innerText = turn === O ? O : X;
-    updateMinorState(tile, tileNumber - 1);
+    const gameEnded = updateMinorState(tile, tileNumber - 1);
     setActiveMinor(tileNumber - 1);
-    switchTurns();
-    setHoverText();
+    if (!gameEnded) {
+        switchTurns();
+        setHoverText();
+    }
 }
 // ----------------------------
 
@@ -78,16 +83,20 @@ function updateMinorState(tile, tileIndex) {
         minorState[tile.dataset.minor - 1] = turn === X ? 1 : 2;
         if (checkMajorWin(tile.dataset.minor - 1)) {
             showWinFrame();
+            removeHoverText();
+            return true;
         }
-        return;
+        return false;
     }
     if (checkForMinorDraw(tileIndex)) {
         minorState[tile.dataset.minor - 1] = 3;
     }
     if (checkForMajorDraw()) {
         showDrawFrame();
+        removeHoverText();
+        return true;
     }
-
+    return false;
 }
 function checkForMajorDraw() {
     for (var i = 0; i < 9; i++) {
@@ -172,21 +181,14 @@ function checkMajorWin() {
 }
 // ----------------------------
 
-// restart-game ---------------
-function restartGame() { // PENDING
-    minorWins.forEach(minorWin => {
-        minorWin.classList.toggle("hidden");
-    });
-}
-// ----------------------------
-
 // minor-win ------------------
 function bringMinorWinToFront(tileIndex) {
     const row = Math.floor(Math.floor(tileIndex / 9) / 3);
     const col = Math.floor((tileIndex % 9) / 3);
     minorWinIndex = row * 3 + col;
-    minorWins[minorWinIndex].classList.toggle("hidden");
-    minorWins[minorWinIndex].classList.toggle("top-element");
+    minorWins[minorWinIndex].classList.remove("hidden");
+    minorWins[minorWinIndex].classList.remove("top-element");
+    minorWins[minorWinIndex].classList.add("top-element");
     minorWins[minorWinIndex].style.marginTop = findMarginTop(row, col);
     minorWins[minorWinIndex].style.marginLeft = findMarginLeft(row, col)
     minorWins[minorWinIndex].innerHTML = turn;
@@ -203,28 +205,40 @@ function findMarginLeft(row, col) {
 
 // end game frame -------------
 function showDrawFrame() {
-    console.log("draw");
+    gameOverArea.classList.remove("hidden");
+    gameOverText.innerText = "Draw";
 }
 function showWinFrame() {
     const winner = turn;
-    console.log(`${winnder} is the winner`);
+    gameOverArea.classList.remove("hidden");
+    gameOverText.innerText = `Winner is ${winner}`;
 }
 // ----------------------------
 
 // game loop ------------------
 function startGame() {
-    hideSelection();
-    showBoard();
+    tiles.forEach(tile => tile.innerText = "");
+    emojis.forEach(emoji => emoji.style.opacity=1);
+    minorState.fill(0);
+    minorWins.forEach(minorWin => {
+        minorWin.classList.remove("top-element");
+        minorWin.classList.remove("hidden");
+        minorWin.classList.add("hidden");
+    });
+    gameOverArea.classList.add("hidden");
+    board.classList.add("hidden");
+    selection.classList.remove("hidden");
+    activeMinor = -1;
+    X = "";
+    O = "";
+}
+function continueGame() {
+    selection.classList.remove("hidden");
+    selection.classList.toggle("hidden");
+    board.classList.remove("hidden");
     turn = O;
     switchTurns();
     setHoverText();
-    restartGame();
-}
-function hideSelection() {
-    selection.classList.toggle("hidden");
-}
-function showBoard() {
-    board.classList.toggle("hidden");
 }
 function switchTurns() {
     turn = turn === X ? O : X;
@@ -232,7 +246,6 @@ function switchTurns() {
 }
 function changeHoverRule() {
     var ruleIndex = findRuleIndex();
-    console.log(ruleIndex);
     if (ruleIndex !== -1) document.styleSheets[0].deleteRule(ruleIndex);
     const newRule = `.player-hover:hover::after { content: '${turn}'; opacity: 0.4; }`; 
     document.styleSheets[0].insertRule(newRule);
@@ -245,4 +258,8 @@ function findRuleIndex() {
     }
     return -1;
 }
+// ----------------------------
+
+// entry-point ----------------
+startGame();
 // ----------------------------
