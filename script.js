@@ -41,3 +41,10 @@ setTimeout(function() {
     content.style.transform = 'translateY(0)';
     content.style.pointerEvents = "auto";
 }, 3900);
+
+setTimeout(function() {
+    const content = document.getElementById('gameoflife-logo');
+    content.style.opacity = 1;
+    content.style.transform = 'translateY(0)';
+    content.style.pointerEvents = "auto";
+}, 4100);

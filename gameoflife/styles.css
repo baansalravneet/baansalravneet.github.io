@@ -1,0 +1,19 @@
+body {
+    background-color: dimgray;
+    font-family: 'Ubuntu', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: white;
+}
+
+.alive {
+    background-color: white;
+}
+
+#board {
+    display: grid;
+    grid-template-columns: repeat(100, min(1vh, 1vw));
+    grid-template-rows: repeat(100, min(1vh, 1vw));
+    position: relative;
+}
